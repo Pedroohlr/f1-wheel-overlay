@@ -1,5 +1,6 @@
 import type { BrowserWindow } from 'electron'
 import { IpcChannel, type OverlayMode } from '@shared/ipc'
+import { sendToWindow } from './windows/send'
 
 /**
  * Owns the overlay interaction mode.
@@ -39,7 +40,6 @@ export class OverlayModeController {
   }
 
   private broadcast(): void {
-    if (this.window.isDestroyed()) return
-    this.window.webContents.send(IpcChannel.modeChanged, this.mode)
+    sendToWindow(this.window, IpcChannel.modeChanged, this.mode)
   }
 }
