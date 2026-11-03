@@ -7,7 +7,8 @@ const api: OverlayApi = {
     const handler = (_event: IpcRendererEvent, mode: OverlayMode): void => listener(mode)
     ipcRenderer.on(IpcChannel.modeChanged, handler)
     return () => ipcRenderer.removeListener(IpcChannel.modeChanged, handler)
-  }
+  },
+  resizeTo: (size) => ipcRenderer.send(IpcChannel.resizeTo, size)
 }
 
 contextBridge.exposeInMainWorld('overlayApi', api)

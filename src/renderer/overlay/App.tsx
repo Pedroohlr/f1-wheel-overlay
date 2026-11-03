@@ -1,3 +1,4 @@
+import { ResizeGrip } from './components/ResizeGrip'
 import { useOverlayMode } from './hooks/useOverlayMode'
 
 export function App(): React.JSX.Element {
@@ -8,7 +9,10 @@ export function App(): React.JSX.Element {
     <main className={editing ? 'overlay overlay--edit' : 'overlay'}>
       <div className="placeholder">F1 WHEEL OVERLAY</div>
       {editing && (
-        <div className="edit-banner">EDIT MODE · drag to move · Ctrl+Shift+O to lock</div>
+        <>
+          <div className="edit-banner">EDIT MODE · drag to move · Ctrl+Shift+O to lock</div>
+          <ResizeGrip />
+        </>
       )}
     </main>
   )

@@ -2,6 +2,27 @@ import { join } from 'node:path'
 import { BrowserWindow } from 'electron'
 
 const DEFAULT_SIZE = { width: 520, height: 340 }
+export const MIN_SIZE = { width: 160, height: 100 }
+export const MAX_SIZE = { width: 2560, height: 1440 }
+
+function clamp(value: number, min: number, max: number): number {
+  return Math.min(max, Math.max(min, value))
+}
+
+function isSize(value: unknown): value is { width: number; height: number } {
+  if (typeof value !== 'object' || value === null) return false
+  const { width, height } = value as Record<string, unknown>
+  return typeof width === 'number' && Number.isFinite(width) && typeof height === 'number' && Number.isFinite(height)
+}
+
+/** Resizes the overlay from untrusted renderer input, clamped to sane limits. */
+export function resizeOverlay(win: BrowserWindow, size: unknown): void {
+  if (!isSize(size) || win.isDestroyed()) return
+  win.setSize(
+    Math.round(clamp(size.width, MIN_SIZE.width, MAX_SIZE.width)),
+    Math.round(clamp(size.height, MIN_SIZE.height, MAX_SIZE.height))
+  )
+}
 
 /**
  * Creates the transparent, frameless, always-on-top overlay window.

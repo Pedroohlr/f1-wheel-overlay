@@ -2,7 +2,7 @@ import { app, BrowserWindow, ipcMain } from 'electron'
 import { IpcChannel } from '@shared/ipc'
 import { OverlayModeController } from './overlay-mode'
 import { DEFAULT_TOGGLE_EDIT_SHORTCUT, registerShortcut, unregisterAllShortcuts } from './shortcuts'
-import { createOverlayWindow } from './windows/overlay-window'
+import { createOverlayWindow, resizeOverlay } from './windows/overlay-window'
 
 let overlayWindow: BrowserWindow | null = null
 let modeController: OverlayModeController | null = null
@@ -12,6 +12,10 @@ function bootstrap(): void {
   modeController = new OverlayModeController(overlayWindow)
 
   ipcMain.handle(IpcChannel.getMode, () => modeController?.current ?? 'click-through')
+
+  ipcMain.on(IpcChannel.resizeTo, (_event, size: unknown) => {
+    if (overlayWindow && modeController?.current === 'edit') resizeOverlay(overlayWindow, size)
+  })
 
   registerShortcut(DEFAULT_TOGGLE_EDIT_SHORTCUT, () => modeController?.toggle())
 

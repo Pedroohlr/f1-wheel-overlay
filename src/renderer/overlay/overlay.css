@@ -55,3 +55,14 @@ body,
   letter-spacing: 0.06em;
   white-space: nowrap;
 }
+
+.resize-grip {
+  -webkit-app-region: no-drag;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 18px;
+  height: 18px;
+  cursor: nwse-resize;
+  background: linear-gradient(135deg, transparent 50%, rgb(255 255 255 / 0.85) 50%);
+}
