@@ -33,6 +33,10 @@ function bootstrap(): void {
   modeController = new OverlayModeController(win)
 
   ipcMain.handle(IpcChannel.getMode, () => modeController?.current ?? 'click-through')
+  ipcMain.handle(IpcChannel.getSettings, () => settings?.get())
+  settings.subscribe((next) => {
+    if (!win.isDestroyed()) win.webContents.send(IpcChannel.settingsChanged, next)
+  })
 
   ipcMain.on(IpcChannel.resizeTo, (_event, size: unknown) => {
     if (overlayWindow && modeController?.current === 'edit') resizeOverlay(overlayWindow, size)
