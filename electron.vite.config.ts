@@ -22,6 +22,7 @@ export default defineConfig({
     resolve: { alias: sharedAlias },
     plugins: [react()],
     build: {
+      minify: true,
       rollupOptions: {
         input: {
           overlay: resolve(__dirname, 'src/renderer/overlay/index.html')
