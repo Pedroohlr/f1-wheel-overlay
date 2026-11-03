@@ -1,3 +1,4 @@
+import type { InputFrame } from './input'
 import type { Settings } from './settings'
 
 /** Interaction mode of the overlay window. */
@@ -14,7 +15,9 @@ export const IpcChannel = {
   modeChanged: 'overlay:mode-changed',
   resizeTo: 'overlay:resize-to',
   getSettings: 'settings:get',
-  settingsChanged: 'settings:changed'
+  settingsChanged: 'settings:changed',
+  getInput: 'input:get',
+  inputFrame: 'input:frame'
 } as const
 
 /** API exposed to the overlay renderer through the preload bridge. */
@@ -25,4 +28,6 @@ export interface OverlayApi {
   resizeTo(size: Size): void
   getSettings(): Promise<Settings>
   onSettingsChange(listener: (settings: Settings) => void): () => void
+  getInput(): Promise<InputFrame>
+  onInput(listener: (frame: InputFrame) => void): () => void
 }

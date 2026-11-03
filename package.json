@@ -10,6 +10,7 @@
   "type": "module",
   "scripts": {
     "dev": "electron-vite dev",
+    "dev:sim": "electron-vite dev -- --simulator",
     "start": "electron-vite preview",
     "typecheck:node": "tsc --noEmit -p tsconfig.node.json",
     "typecheck:web": "tsc --noEmit -p tsconfig.web.json",

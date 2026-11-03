@@ -1,5 +1,6 @@
 import { contextBridge, ipcRenderer, type IpcRendererEvent } from 'electron'
 import { IpcChannel, type OverlayApi, type OverlayMode } from '@shared/ipc'
+import type { InputFrame } from '@shared/input'
 import type { Settings } from '@shared/settings'
 
 const api: OverlayApi = {
@@ -15,6 +16,12 @@ const api: OverlayApi = {
     const handler = (_event: IpcRendererEvent, settings: Settings): void => listener(settings)
     ipcRenderer.on(IpcChannel.settingsChanged, handler)
     return () => ipcRenderer.removeListener(IpcChannel.settingsChanged, handler)
+  },
+  getInput: () => ipcRenderer.invoke(IpcChannel.getInput) as Promise<InputFrame>,
+  onInput: (listener) => {
+    const handler = (_event: IpcRendererEvent, frame: InputFrame): void => listener(frame)
+    ipcRenderer.on(IpcChannel.inputFrame, handler)
+    return () => ipcRenderer.removeListener(IpcChannel.inputFrame, handler)
   }
 }
 
