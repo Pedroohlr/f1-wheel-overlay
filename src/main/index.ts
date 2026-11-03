@@ -1,16 +1,23 @@
 import { app, BrowserWindow, ipcMain } from 'electron'
-import { IpcChannel, type OverlayMode } from '@shared/ipc'
+import { IpcChannel } from '@shared/ipc'
+import { OverlayModeController } from './overlay-mode'
+import { DEFAULT_TOGGLE_EDIT_SHORTCUT, registerShortcut, unregisterAllShortcuts } from './shortcuts'
 import { createOverlayWindow } from './windows/overlay-window'
 
 let overlayWindow: BrowserWindow | null = null
-const mode: OverlayMode = 'click-through'
+let modeController: OverlayModeController | null = null
 
 function bootstrap(): void {
-  ipcMain.handle(IpcChannel.getMode, () => mode)
-
   overlayWindow = createOverlayWindow()
+  modeController = new OverlayModeController(overlayWindow)
+
+  ipcMain.handle(IpcChannel.getMode, () => modeController?.current ?? 'click-through')
+
+  registerShortcut(DEFAULT_TOGGLE_EDIT_SHORTCUT, () => modeController?.toggle())
+
   overlayWindow.on('closed', () => {
     overlayWindow = null
+    modeController = null
   })
 }
 
@@ -22,5 +29,6 @@ if (!app.requestSingleInstanceLock()) {
     console.error('Failed to start the overlay', error)
     app.quit()
   })
+  app.on('will-quit', unregisterAllShortcuts)
   app.on('window-all-closed', () => app.quit())
 }
