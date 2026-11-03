@@ -30,6 +30,7 @@
     "vite": "^8.3.5"
   },
   "dependencies": {
+    "@kmamal/sdl": "^0.11.13",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "zod": "^4.6.7"
