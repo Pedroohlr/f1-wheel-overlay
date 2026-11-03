@@ -54,10 +54,13 @@ if (!app.requestSingleInstanceLock()) {
   app.quit()
 } else {
   app.on('second-instance', () => overlayWindow?.showInactive())
-  app.whenReady().then(bootstrap).catch((error: unknown) => {
-    console.error('Failed to start the overlay', error)
-    app.quit()
-  })
+  app
+    .whenReady()
+    .then(bootstrap)
+    .catch((error: unknown) => {
+      console.error('Failed to start the overlay', error)
+      app.quit()
+    })
   app.on('will-quit', () => {
     unregisterAllShortcuts()
     settings?.flush()

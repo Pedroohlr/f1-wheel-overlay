@@ -13,7 +13,12 @@ function clamp(value: number, min: number, max: number): number {
 function isSize(value: unknown): value is { width: number; height: number } {
   if (typeof value !== 'object' || value === null) return false
   const { width, height } = value as Record<string, unknown>
-  return typeof width === 'number' && Number.isFinite(width) && typeof height === 'number' && Number.isFinite(height)
+  return (
+    typeof width === 'number' &&
+    Number.isFinite(width) &&
+    typeof height === 'number' &&
+    Number.isFinite(height)
+  )
 }
 
 /** Resizes the overlay from untrusted renderer input, clamped to sane limits. */
@@ -29,8 +34,10 @@ export function resizeOverlay(win: BrowserWindow, size: unknown): void {
 function isOnScreen(bounds: Bounds): boolean {
   const MIN_VISIBLE = 40
   return screen.getAllDisplays().some(({ workArea: area }) => {
-    const overlapX = Math.min(bounds.x + bounds.width, area.x + area.width) - Math.max(bounds.x, area.x)
-    const overlapY = Math.min(bounds.y + bounds.height, area.y + area.height) - Math.max(bounds.y, area.y)
+    const overlapX =
+      Math.min(bounds.x + bounds.width, area.x + area.width) - Math.max(bounds.x, area.x)
+    const overlapY =
+      Math.min(bounds.y + bounds.height, area.y + area.height) - Math.max(bounds.y, area.y)
     return overlapX >= MIN_VISIBLE && overlapY >= MIN_VISIBLE
   })
 }
