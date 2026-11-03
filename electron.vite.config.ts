@@ -9,7 +9,13 @@ export default defineConfig({
     resolve: { alias: sharedAlias }
   },
   preload: {
-    resolve: { alias: sharedAlias }
+    resolve: { alias: sharedAlias },
+    build: {
+      rollupOptions: {
+        // Sandboxed preload scripts must be CommonJS.
+        output: { format: 'cjs', entryFileNames: '[name].cjs' }
+      }
+    }
   },
   renderer: {
     root: resolve(__dirname, 'src/renderer'),
